@@ -6,3 +6,10 @@ INSERT INTO categories (name) VALUES('Pizze');
 <!-- TABELLA PONTE PHOTOS-CATEGORIES
 INSERT INTO photo_category (photo_id, category_id) VALUES(1,1);
 INSERT INTO photo_category (photo_id, category_id) VALUES(2,1);
+<!-- SECURITY
+INSERT INTO roles (id, name) VALUES(1,'ADMIN');
+INSERT INTO roles (id, name) VALUES(2,'USER');
+INSERT INTO users (id, email, first_name, last_name, password) VALUES(1, 'simo@email.com', 'Simo', 'Simoni', '{noop}password');
+INSERT INTO users (id, email, first_name, last_name, password) VALUES(2, 'marino@email.com', 'Marino', 'Marini', '{noop}marini');
+INSERT INTO users_roles (roles_id, user_id) VALUES(1, 1);
+INSERT INTO users_roles (roles_id, user_id) VALUES(2, 2);
