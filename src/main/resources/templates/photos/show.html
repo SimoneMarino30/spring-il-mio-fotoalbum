@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:insert="~{/fragments/resources :: head(pageTitle='Photos List')}">
+    <title>Show</title>
+</head>
+<body class="container">
+<div class="card" style="height: 30rem;">
+    <img th:src="${photo.urlPic}" class="card-img-top img-fluid" alt="photo" style="height: 13rem;">
+    <div class="card-body">
+        <h5 class="card-title" th:text="${photo.title}"></h5>
+        <p class="card-text" th:text="${photo.description}"></p>
+    </div>
+</div>
+</body>
+</html>
