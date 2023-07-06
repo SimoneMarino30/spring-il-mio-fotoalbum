@@ -13,7 +13,7 @@
     <!-- form di creazione di una photo -->
     <!-- action del form -->
     <form
-            th:with="formAction=${isEdit ? '/photos/edit/'+ book.id : '/photos/create'}"
+            th:with="formAction=${isEdit ? '/photos/edit/'+ photo.id : '/photos/create'}"
             th:action="@{${formAction}}"
             th:object="${photo}"
             method="post"

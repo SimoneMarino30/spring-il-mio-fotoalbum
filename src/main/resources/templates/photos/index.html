@@ -6,6 +6,12 @@
 <nav th:replace="~{/fragments/navbar :: navbar(current='photos')}"></nav>
 <div class=" container">
     <div class="d-flex justify-content-between align-items-center my-3">
+        <!-- eventuale messaggio -->
+        <div th:if="${message != null}" class="alert alert-dismissible fade show"
+             th:classAppend="${#strings.equalsIgnoreCase(message.type, 'SUCCESS')} ? 'alert-success' : 'alert-danger'">
+            <div th:text="${message.message}"></div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
         <!-- form di ricerca -->
         <div>
             <form th:action="@{/photos}" method="GET">
@@ -28,6 +34,8 @@
                     <h5 class="card-title" th:text="${photo.title}"></h5>
                     <p class="card-text" th:text="${photo.description}"></p>
                     <a  th:href="@{|/photos/${photo.id}|}" class="btn btn-primary">See details</a>
+                    <a class="btn btn-primary me-1" th:href="@{|/photos/edit/${photo.id}|}"><i
+                            class="fa-solid fa-pen-to-square"></i></a>
                 </div>
             </div>
         </div>
