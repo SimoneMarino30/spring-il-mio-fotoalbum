@@ -3,6 +3,8 @@ package org.lessons.springilmiofotoalbum.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
+import java.util.List;
+
 @Entity
 @Table(name = "photos")
 public class Photo {
@@ -16,6 +18,15 @@ public class Photo {
     @NotBlank(message = "URL must not be null or blank")
     private String urlPic;
     private boolean visible;
+    // relazione N:N, creazione tabella ponte
+    @ManyToMany()
+    @JoinTable(
+            name = "photo_category",
+            joinColumns = @JoinColumn(name = "photo_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id")
+    )
+    // lista categories associabili alle photos
+    private List<Category> categories;
 
     //GETTERS & SETTERS
     public Integer getId() {
@@ -56,5 +67,15 @@ public class Photo {
 
     public void setVisible(boolean visible) {
         this.visible = visible;
+    }
+
+    //GETTERS & SETTERS RELATIONS
+
+    public List<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(List<Category> categories) {
+        this.categories = categories;
     }
 }
