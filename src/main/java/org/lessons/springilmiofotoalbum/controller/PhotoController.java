@@ -1,5 +1,6 @@
 package org.lessons.springilmiofotoalbum.controller;
 
+import jakarta.validation.Valid;
 import org.lessons.springilmiofotoalbum.model.Photo;
 import org.lessons.springilmiofotoalbum.repository.CategoryRepository;
 import org.lessons.springilmiofotoalbum.repository.PhotoRepository;
@@ -8,12 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,6 +28,9 @@ public class PhotoController {
     @Autowired
     PhotoService photoService;
 
+    /* *
+    METODI PER LA READ
+    * */
     @GetMapping
     public String index(
             @RequestParam(name = "keyword", required = false) String searchString,
@@ -60,5 +64,50 @@ public class PhotoController {
             // eccezione 'custom' per richieste http
         }
         return result.get();
+    }
+
+    /* *
+    METODI PER LA CREATE
+    * */
+    // controller che restituisce la pagina con form di creazione del nuovo book
+    // controller che restituisce la pagina con form di creazione del nuovo book
+    @GetMapping("/create")
+    public String create(Model model) {
+        // aggiungo al model l'attributo photo contenente una Photo vuota
+        model.addAttribute("photo", new Photo());
+        return "/photos/edit"; // template con form di creazione di un book
+    }
+
+    // controller che gestisce la post del form coi dati della photo
+    @PostMapping("/create")
+    public String store(@Valid @ModelAttribute("photo") Photo formPhoto, BindingResult bindingResult) {
+        // i dati del book sono dentro all'oggetto formBook
+
+        // verifico se l'isbn è univoco
+        if (!isUniqueTitle(formPhoto)) {
+            // aggiungo a mano un errore nella mappa BindingResult
+            bindingResult.addError(new FieldError("photo", "title", formPhoto.getTitle(), false, null, null,
+                    "Title must be unique"));
+        }
+        // verifico se in validazione ci sono stati errori
+        if (bindingResult.hasErrors()) {
+            // ci sono stati errori
+            return "/photos/edit"; // ritorno il template del form ma col book precaricato
+        }
+
+        // setto il timestamp di creazione
+        formPhoto.setCreatedAt(LocalDateTime.now());
+        // persisto formBook su database
+        // il metodo save fa una create sql se l'oggetto con quella PK non esiste, altrimenti fa update
+        photoRepository.save(formPhoto);
+
+        // se tutto va a buon fine rimando alla lista dei books
+        return "redirect:/photos";
+    }
+
+    // metodo per verificare se su database c'è già una con lo stesso title della photo passata come parametro
+    private boolean isUniqueTitle(Photo formPhoto) {
+        List<Photo> result = photoRepository.findByTitleContainingIgnoreCase(formPhoto.getTitle());
+        return result.isEmpty();
     }
 }
