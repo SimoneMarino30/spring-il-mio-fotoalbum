@@ -4,6 +4,7 @@
     <title>Show</title>
 </head>
 <body class="container">
+<nav th:replace="~{/fragments/navbar :: navbar(current='photos')}"></nav>
 <div class="card" style="height: 30rem;">
     <img th:src="${photo.urlPic}" class="card-img-top img-fluid" alt="photo" style="height: 13rem;">
     <div class="card-body">
