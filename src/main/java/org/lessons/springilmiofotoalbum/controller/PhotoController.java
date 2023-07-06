@@ -140,6 +140,23 @@ public class PhotoController {
         return "redirect:/photos";
     }
 
+    /* *
+    MEDODI PER DELETE
+    * */
+    @PostMapping("/delete/{id}")
+    public String delete(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
+        // verifichiamo che esiste la photo con quell'id
+        Photo photoToDelete = getPhotoById(id);
+        // lo cancelliamo
+        photoRepository.delete(photoToDelete);
+        // aggiungo un messaggio di successo come flashAttribute
+        redirectAttributes.addFlashAttribute("message",
+                new AlertMessage(AlertMessageType.SUCCESS,
+                        "Photo " + photoToDelete.getTitle() + " deleted!"));
+        // facciamo la redirect alla lista dei book
+        return "redirect:/photos";
+    }
+
     // METODI CUSTOM
 
     // metodo per verificare se su database c'è già una con lo stesso title della photo passata come parametro
