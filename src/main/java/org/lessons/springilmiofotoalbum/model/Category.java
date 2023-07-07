@@ -49,4 +49,6 @@ public class Category {
     public void setPhotos(List<Photo> photos) {
         this.photos = photos;
     }
+
+
 }
