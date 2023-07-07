@@ -52,9 +52,15 @@ public class SecurityConfiguration {
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         // definisco la catena di filtri
         http.authorizeHttpRequests()
+                .requestMatchers("/categories/**").hasAuthority("ADMIN")
+                .requestMatchers("/photos/edit/**").hasAuthority("ADMIN")
+                .requestMatchers("/photos/create").hasAuthority("ADMIN")
+                .requestMatchers("/photos/**").hasAnyAuthority("ADMIN", "USER")
+                .requestMatchers(HttpMethod.POST,"/photos/**").hasAuthority("ADMIN")
                 .requestMatchers("/**").permitAll()
                 .and().formLogin()
                 .and().logout();
+        http.csrf().disable();
         return http.build();
 
     }
