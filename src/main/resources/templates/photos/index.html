@@ -4,7 +4,7 @@
 </head>
 <body>
 <nav th:replace="~{/fragments/navbar :: navbar(current='photos')}"></nav>
-<div class="container" th:if="${photoList.size() > 0}">
+<div class="container">
     <!-- eventuale messaggio di delete -->
     <div th:if="${message != null}" class="alert alert-dismissible fade show"
          th:classAppend="${#strings.equalsIgnoreCase(message.type, 'SUCCESS')} ? 'alert-success' : 'alert-danger'">
@@ -28,8 +28,8 @@
             <a  th:href="@{/photos/create}" class="btn btn-success">Add a new 📸</a>
         </div>
     </div>
-
-    <table class="table table-striped">
+    <!-- mostro la tabella solo se la lista ha risultati -->
+    <table class="table table-striped" th:if="${photoList.size() > 0}">
         <thead>
         <tr class="text-bg-success">
             <th class="">Preview</th>
