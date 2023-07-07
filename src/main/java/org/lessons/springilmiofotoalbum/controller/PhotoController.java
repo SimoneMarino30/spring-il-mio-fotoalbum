@@ -65,12 +65,14 @@ public class PhotoController {
     public String create(Model model) {
         // aggiungo al model l'attributo photo contenente una Photo vuota
         model.addAttribute("photo", new Photo());
+        // aggiungo al model la lista delle categorie per popolare le checkbox
+        model.addAttribute("categoryList", categoryRepository.findAll());
         return "/photos/edit"; // template con form di creazione di una photo
     }
 
     // controller che gestisce la post del form coi dati della photo
     @PostMapping("/create")
-    public String store(@Valid @ModelAttribute("photo") Photo formPhoto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+    public String store(@Valid @ModelAttribute("photo") Photo formPhoto, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
         // i dati del book sono dentro all'oggetto formPhoto
 
         // verifico se l'isbn è univoco
@@ -82,6 +84,8 @@ public class PhotoController {
         // verifico se in validazione ci sono stati errori
         if (bindingResult.hasErrors()) {
             // ci sono stati errori
+            // aggiungo al model la lista delle categorie per popolare le checkbox
+            model.addAttribute("categoryList", categoryRepository.findAll());
             return "/photos/edit"; // ritorno il template del form ma con la photo precaricata
         }
 
@@ -105,6 +109,8 @@ public class PhotoController {
         // recupero i dati di quella photo da database
         // aggiungo la photo al model
         model.addAttribute("photo", photo);
+        // aggiungo al model la lista delle categorie per popolare le checkbox
+        model.addAttribute("categoryList", categoryRepository.findAll());
         // restituisco il template con il form di edit
         return "/photos/edit";
     }
@@ -114,7 +120,8 @@ public class PhotoController {
             @PathVariable Integer id,
             @Valid @ModelAttribute("photo") Photo formPhoto,
             BindingResult bindingResult,
-            RedirectAttributes redirectAttributes
+            RedirectAttributes redirectAttributes,
+            Model model
     ) {
         // cerco il book per id
         Photo photoToEdit = getPhotoById(id); // vecchia versione della photo
@@ -126,6 +133,8 @@ public class PhotoController {
                     "Title must be unique"));
         }
         if (bindingResult.hasErrors()) {
+            // aggiungo al model la lista delle categorie per popolare le checkbox
+            model.addAttribute("categoryList", categoryRepository.findAll());
             // se ci sono errori ritorno il template col form
             return "/photos/edit";
         }
