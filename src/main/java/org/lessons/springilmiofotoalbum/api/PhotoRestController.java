@@ -27,11 +27,11 @@ public class PhotoRestController {
     // servizio per avere la lista delle photo
     @GetMapping
     public List<Photo> index(@RequestParam Optional<String> keyword) {
-        // restituisco la lista di tutti i libri presi da database
+        // restituisco la lista di tutti le photo prese da database
         return photoService.getAll(keyword);
     }
 
-    // servizio per vedere il dettaglio della singola Photo
+    // servizio per vedere il dettaglio della singola photo
     @GetMapping("/{id}")
     public Photo get(@PathVariable Integer id) {
         // cerco la photo per id su DB
@@ -42,10 +42,10 @@ public class PhotoRestController {
         }
     }
 
-    // servizio per creare un nuovo book, che arriva come JSON nel Request Body
-    @PostMapping
+    // TRAINING API
+    // servizio per creare un nuova photo, che arriva come JSON nel Request Body
+    /*@PostMapping
     public Photo create(@Valid @RequestBody Photo photo) {
-        // da gestire unicità del title
         try{
             return photoService.create(photo);
         } catch(NotUniqueTitleException e) {
@@ -53,7 +53,7 @@ public class PhotoRestController {
         }
     }
 
-    // servizio per l' update del Book
+    // servizio per l' update della photo
     @PutMapping("/{id}")
     // bodyrequest passa i dati da modificare, ma devo passare tutti i campi(PATCH fa modifica di un singolo campo)
     public Photo update(@PathVariable Integer id, @Valid @RequestBody Photo photo) {
@@ -61,9 +61,9 @@ public class PhotoRestController {
         return photoRepository.save(photo);
     }
 
-    // servizio per cancellare un book
+    // servizio per cancellare una photo
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Integer id) {
         photoRepository.deleteById(id);
-    }
+    }*/
 }
