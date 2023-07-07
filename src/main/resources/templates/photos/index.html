@@ -4,51 +4,77 @@
 </head>
 <body>
 <nav th:replace="~{/fragments/navbar :: navbar(current='photos')}"></nav>
-<div class=" container">
-    <div class="d-flex justify-content-between align-items-center my-3">
-        <!-- eventuale messaggio -->
-        <div th:if="${message != null}" class="alert alert-dismissible fade show"
-             th:classAppend="${#strings.equalsIgnoreCase(message.type, 'SUCCESS')} ? 'alert-success' : 'alert-danger'">
-            <div th:text="${message.message}"></div>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-        <!-- form di ricerca -->
-        <div>
+<div class="container" th:if="${photoList.size() > 0}">
+    <!-- eventuale messaggio di delete -->
+    <div th:if="${message != null}" class="alert alert-dismissible fade show"
+         th:classAppend="${#strings.equalsIgnoreCase(message.type, 'SUCCESS')} ? 'alert-success' : 'alert-danger'">
+        <div th:text="${message.message}"></div>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <div class="row my-5">
+        <div class="col-10">
+            <!-- form di ricerca -->
             <form th:action="@{/photos}" method="GET">
                 <div class="input-group">
                     <input type="search" class="form-control" placeholder="Search by photo's name or categories"
-                           name="keyword" th:value="${searchInput}">
+                               name="keyword" th:value="${searchInput}">
                     <button class="btn btn-outline-secondary" type="submit">
                         <i class="fa-solid fa-magnifying-glass"></i>
                     </button>
                 </div>
             </form>
-            <a  th:href="@{/photos/create}" class="btn btn-primary">Add a new photo</a>
+        </div>
+        <div class="col-2 d-flex justify-content-end">
+            <a  th:href="@{/photos/create}" class="btn btn-success">Add a new 📸</a>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-3" th:each="photo : ${photoList}">
-            <div class="card" style="height: 30rem;">
-                <img th:src="${photo.urlPic}" class="card-img-top img-fluid" alt="photo" style="height: 13rem;">
-                <div class="card-body">
-                    <h5 class="card-title" th:text="${photo.title}"></h5>
-                    <p class="card-text" th:text="${photo.description}"></p>
-                    <a  th:href="@{|/photos/${photo.id}|}" class="btn btn-primary">See details</a>
-                    <a class="btn btn-primary me-1" th:href="@{|/photos/edit/${photo.id}|}">
-                        <i class="fa-solid fa-pen-to-square"></i>
+
+    <table class="table table-striped">
+        <thead>
+        <tr class="text-bg-success">
+            <th class="">Preview</th>
+            <th class="">Title</th>
+            <th class="">Description</th>
+            <th class="">Visibility</th>
+            <th class="">Created</th>
+            <th class="">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="photo : ${photoList}" class="table-dark">
+            <td>
+                <img th:src="${photo.urlPic}" class="plate img-fluid" alt="photo">
+            </td>
+            <td th:text="${photo.title}"></td>
+            <td th:text="${photo.description}"></td>
+            <td th:text="${photo.visible}"></td>
+            <td th:text="${photo.getFormattedCreatedAt()}"></td>
+            <td>
+                <div class="d-flex gap-1">
+                    <a th:href="@{|/photos/${photo.id}|}">
+                        <button class="btn btn-success" type="submit">
+                            <i class="fa-solid fa-camera"></i>
+                        </button>
                     </a>
-                    <!-- form per bottone di delete  -->
-                    <form
-                            th:action="@{|/photos/delete/${photo.id}|}"
-                            method="post"
-                    >
-                        <button class="btn btn-primary" type="submit"><i class="fa-solid fa-trash-can"></i>
+                    <!-- sec:authorize="hasAuthority('ADMIN')" -->
+                    <a th:href="@{|/photos/edit/${photo.id}|}">
+                        <button class="btn btn-light" type="submit">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </button>
+                    </a>
+                    <!-- faccio il form essendo una richiesta POST e non GET come nelle 2 actions sopra -->
+                    <form th:action="@{|/photos/delete/${photo.id}|}" method="post">
+                        <button class="btn btn-danger" type="submit">
+                            <i class="fa-solid fa-trash"></i>
                         </button>
                     </form>
-
                 </div>
-            </div>
-        </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="text-danger text-center" th:unless="${photoList.size() > 0}">
+        The 📸 list is empty 🤷‍
     </div>
 </div>
 </body>
