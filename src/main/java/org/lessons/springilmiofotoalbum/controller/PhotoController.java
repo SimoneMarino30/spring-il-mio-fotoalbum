@@ -75,12 +75,17 @@ public class PhotoController {
     public String store(@Valid @ModelAttribute("photo") Photo formPhoto, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
         // i dati del book sono dentro all'oggetto formPhoto
 
-        // verifico se l'isbn è univoco
-        if (!isUniqueTitle(formPhoto)) {
+        // verifico se l'title è univoco
+        /*if (!isUniqueTitle(formPhoto)) {
             // aggiungo a mano un errore nella mappa BindingResult
             bindingResult.addError(new FieldError("photo", "title", formPhoto.getTitle(), false, null, null,
                     "Title must be unique"));
+        }*/
+        if(!photoService.isUniqueTitle(formPhoto)) {
+            bindingResult.addError(new FieldError("photo", "title", formPhoto.getTitle(), false, null, null,
+                    "Title must be unique"));
         }
+
         // verifico se in validazione ci sono stati errori
         if (bindingResult.hasErrors()) {
             // ci sono stati errori
