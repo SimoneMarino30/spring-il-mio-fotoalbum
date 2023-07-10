@@ -1,4 +1,4 @@
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head th:insert="~{/fragments/resources :: head(pageTitle='photos')}">
     <title>Index</title>
 </head>
@@ -25,7 +25,7 @@
             </form>
         </div>
         <div class="col-2 d-flex justify-content-end">
-            <a  th:href="@{/photos/create}" class="btn btn-success">Add a new 📸</a>
+            <a  th:href="@{/photos/create}" class="btn btn-success" sec:authorize="hasAuthority('ADMIN')">Add a new 📸</a>
         </div>
     </div>
     <!-- mostro la tabella solo se la lista ha risultati -->
@@ -57,13 +57,13 @@
                         </button>
                     </a>
                     <!-- sec:authorize="hasAuthority('ADMIN')" -->
-                    <a th:href="@{|/photos/edit/${photo.id}|}">
+                    <a th:href="@{|/photos/edit/${photo.id}|}" sec:authorize="hasAuthority('ADMIN')">
                         <button class="btn btn-light" type="submit">
                             <i class="fa-solid fa-pen-to-square"></i>
                         </button>
                     </a>
                     <!-- faccio il form essendo una richiesta POST e non GET come nelle 2 actions sopra -->
-                    <form th:action="@{|/photos/delete/${photo.id}|}" method="post">
+                    <form th:action="@{|/photos/delete/${photo.id}|}" method="post"  sec:authorize="hasAuthority('ADMIN')">
                         <button class="btn btn-danger" type="submit">
                             <i class="fa-solid fa-trash"></i>
                         </button>
