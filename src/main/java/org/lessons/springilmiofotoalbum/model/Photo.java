@@ -1,9 +1,12 @@
 package org.lessons.springilmiofotoalbum.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -29,7 +32,7 @@ public class Photo {
             inverseJoinColumns = @JoinColumn(name = "category_id")
     )
     // lista categories associabili alle photos
-    private List<Category> categories;
+    private List<Category> categories = new ArrayList<>();
 
     //GETTERS & SETTERS
     public Integer getId() {
@@ -88,5 +91,11 @@ public class Photo {
 
     public void setCategories(List<Category> categories) {
         this.categories = categories;
+    }
+
+    @JsonIgnore
+    public String getFormattedCreatedAt() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy MMMM dd 'at' HH:mm");
+        return createdAt.format(formatter);
     }
 }

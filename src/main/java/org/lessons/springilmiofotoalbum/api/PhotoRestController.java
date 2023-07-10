@@ -42,6 +42,16 @@ public class PhotoRestController {
         }
     }
 
+    // servizio per creare un nuovo messaggio, che arriva come JSON nel Request Body(FORM DA FARE)
+    @PostMapping
+    public Photo create(@Valid @RequestBody Photo photo) {
+        try{
+            return photoService.create(photo);
+        } catch(NotUniqueTitleException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
     // TRAINING API
     // servizio per creare un nuova photo, che arriva come JSON nel Request Body
     /*@PostMapping

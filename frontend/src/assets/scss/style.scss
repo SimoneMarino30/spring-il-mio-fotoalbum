@@ -1,0 +1,9 @@
+@use "./partials/variables" as *;
+// Montserrat font
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+
+body {
+  font-family: $primary-font;
+  //background-color: grey;
+  min-height: 100vh;
+}
